@@ -34,15 +34,17 @@ jobs:
         run: python tests/script.py
 
       - name: Checkout repositories
+        if: matrix.os == 'ubuntu-latest'
         run: |
           git clone https://github.com/conda/conda
           git -C conda checkout "${{ matrix.conda-version }}"
           git clone https://github.com/conda/conda-libmamba-solver
-          git -C conda-libmamba-solver checkout "${{ matrix.conda-libmamba-solver }}"
+          git -C conda-libmamba-solver checkout "${{ matrix.conda-libmamba-version }}"
 
       - name: Run tests
+        if: matrix.os == 'ubuntu-latest'
         run: |
-          docker run -it --rm \
+          docker run --rm \
             --platform=linux/amd64 \
             -v $PWD/conda:/opt/conda-src \
             -v $PWD/conda-libmamba-solver:/opt/conda-libmamba-solver-src \
