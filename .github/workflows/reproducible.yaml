@@ -31,4 +31,21 @@ jobs:
 
       - name: Test
         shell: bash -el {0}
-        run: python test_script.py
+        run: python tests/script.py
+
+      - name: Checkout repositories
+        run: |
+          git clone https://github.com/conda/conda
+          git -C conda checkout "${{ matrix.conda-version }}"
+          git clone https://github.com/conda/conda-libmamba-solver
+          git -C conda-libmamba-solver checkout "${{ matrix.conda-libmamba-solver }}"
+
+      - name: Run tests
+        run: |
+          docker run -it --rm \
+            --platform=linux/amd64 \
+            -v $PWD/conda:/opt/conda-src \
+            -v $PWD/conda-libmamba-solver:/opt/conda-libmamba-solver-src \
+            -v $PWD/tests:/opt/tests \
+            ghcr.io/conda/conda-ci:main-linux-python3.9 \
+            bash -c "source /opt/conda-libmamba-solver-src/dev/bashrc_linux.sh && python /opt/tests/script.py"
