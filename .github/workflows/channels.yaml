@@ -47,7 +47,7 @@ jobs:
       - name: Conda Info
         shell: bash -el {0}
         run: |
-          printf '{"channels": ["conda-forge"], "solver": "libmamba"}' | conda config --stdin
+          printf '{"channels": ["conda-forge"], "solver": "libmamba"}' > ~/.condarc
           conda info
           conda config --show
           conda list
