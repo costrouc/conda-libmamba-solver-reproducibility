@@ -1,0 +1,60 @@
+name: Channels
+
+on:
+  workflow_dispatch:
+    inputs:
+      os:
+        description: 'Operating System'
+        required: true
+        default: 'ubuntu-latest'
+        type: choice
+        options:
+        - macos-latest
+        - ubuntu-latest
+        - windows-latest
+      conda-version:
+        description: 'Conda Version'
+        required: true
+        default: '23.1.0'
+        type: choice
+        options:
+        - '23.1.0'
+        - '22.11.0'
+      conda-libmamba-version:
+        description: 'conda-libmamba-solver Version'
+        required: true
+        default: '23.1.0'
+        type: choice
+        options:
+        - '23.1.0'
+
+jobs:
+  test:
+    runs-on: ${{ inputs.os }}
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@master
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+
+      - name: Installation
+        shell: bash -el {0}
+        run: conda install -c conda-forge conda==${{ inputs.conda-version }} conda-libmamba-solver==${{ inputs.conda-libmamba-version }}
+
+      - name: Conda Info
+        shell: bash -el {0}
+        run: |
+          conda config --remove-key 'channels'
+          conda config --append 'channels' 'conda-forge'
+          conda config --set 'solver' 'libmamba'
+
+          conda info
+          conda list
+
+      - name: Test
+        shell: bash -el {0}
+        run: |
+          conda create -n test numpy --dry-run
