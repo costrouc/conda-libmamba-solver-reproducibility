@@ -63,6 +63,7 @@ jobs:
         with:
           auto-activate-base: true
           activate-environment: ""
+          channels: conda-forge
           mamba-version: ${{ inputs.mamba-version }}
           use-mamba: true
 
