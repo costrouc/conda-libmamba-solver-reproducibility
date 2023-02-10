@@ -1,15 +1,36 @@
 name: Reproducibility
 
-on: [push]
+on:
+  workflow_dispatch:
+    inputs:
+      os:
+        description: 'Operating System'
+        required: true
+        default: 'ubuntu-latest'
+        type: choice
+        options:
+        - macos-latest
+        - ubuntu-latest
+        - windows-latest
+      conda-version:
+        description: 'Conda Version'
+        required: true
+        default: '23.1.0'
+        type: choice
+        options:
+        - '23.1.0'
+        - '22.11.0'
+      conda-libmamba-version:
+        description: 'conda-libmamba-solver Version'
+        required: true
+        default: '23.1.0'
+        type: choice
+        options:
+        - '23.1.0'
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-        conda-version: ["23.1.0"]
-        conda-libmamba-version: ["23.1.0"]
+    runs-on: ${{ inputs.os }}
     steps:
       - name: 'Checkout Repository'
         uses: actions/checkout@master
@@ -21,7 +42,7 @@ jobs:
 
       - name: Installation
         shell: bash -el {0}
-        run: conda install -c conda-forge conda==${{ matrix.conda-version }} conda-libmamba-solver==${{ matrix.conda-libmamba-version }}
+        run: conda install -c conda-forge conda==${{ inputs.conda-version }} conda-libmamba-solver==${{ inputs.conda-libmamba-version }}
 
       - name: Conda info
         shell: bash -el {0}
@@ -37,9 +58,9 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           git clone https://github.com/conda/conda
-          git -C conda checkout "${{ matrix.conda-version }}"
+          git -C conda checkout "${{ inputs.conda-version }}"
           git clone https://github.com/conda/conda-libmamba-solver
-          git -C conda-libmamba-solver checkout "${{ matrix.conda-libmamba-version }}"
+          git -C conda-libmamba-solver checkout "${{ inputs.conda-libmamba-version }}"
 
       - name: Run tests
         if: matrix.os == 'ubuntu-latest'
