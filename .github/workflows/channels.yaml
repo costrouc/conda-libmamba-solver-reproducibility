@@ -22,6 +22,13 @@ on:
         - '23.1.0'
         - '22.12.0'
         - '22.11.0'
+      mamba-version:
+        description: 'Mamba Version'
+        required: true
+        default: '2023.02.09'
+        type: choice
+        options:
+        - '2023.02.09'
       verbosity:
         description: 'Verbosity'
         required: true
@@ -32,13 +39,87 @@ on:
         - '-v'
         - '-vv'
         - '-vvv'
+      channel:
+        description: 'Channel'
+        required: true
+        default: 'conda-forge'
       packages:
-        description: 'Packages'
+        description: 'Packages (space separated)'
         required: true
         default: "numpy"
 
 jobs:
-  test:
+  mamba:
+    name: mamba=${{ inputs.mamba-version }}  os=${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@master
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+          mamba-version: ${{ inputs.mamba-version }}
+          use-mamba: true
+
+      - name: Conda Info
+        shell: bash -el {0}
+        run: |
+          printf '{"channels": ["${{ inputs.channel }}"], "solver": "classic"}' > ~/.condarc
+          mamba info
+          mamba config --show
+          mamba list
+
+      - name: Create environment
+        shell: bash -el {0}
+        run: |
+          mamba create -n test ${{ inputs.packages }} ${{ inputs.verbosity }}
+
+      - name: List environment details
+        shell: bash -el {0}
+        run: |
+          mamba list -n test
+
+  conda:
+    name: conda=${{ inputs.conda-version }} os=${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@master
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+          conda-version: ${{ inputs.conda-version }}
+
+      - name: Conda Info
+        shell: bash -el {0}
+        run: |
+          printf '{"channels": ["${{ inputs.channel }}"], "solver": "classic"}' > ~/.condarc
+          conda info
+          conda config --show
+          conda list
+
+      - name: Create environment
+        shell: bash -el {0}
+        run: |
+          conda create -n test ${{ inputs.packages }} ${{ inputs.verbosity }}
+
+      - name: List environment details
+        shell: bash -el {0}
+        run: |
+          conda list -n test
+
+  conda-libmamba-solver:
+    name: conda-libmamba-solver=${{ inputs.conda-libmamba-version }} os=${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -60,7 +141,7 @@ jobs:
       - name: Conda Info
         shell: bash -el {0}
         run: |
-          printf '{"channels": ["conda-forge"], "solver": "libmamba"}' > ~/.condarc
+          printf '{"channels": ["${{ inputs.channel }}"], "solver": "libmamba"}' > ~/.condarc
           conda info
           conda config --show
           conda list
@@ -69,3 +150,8 @@ jobs:
         shell: bash -el {0}
         run: |
           conda create -n test ${{ inputs.packages }} ${{ inputs.verbosity }}
+
+      - name: List environment details
+        shell: bash -el {0}
+        run: |
+          conda list -n test
