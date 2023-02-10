@@ -47,11 +47,9 @@ jobs:
       - name: Conda Info
         shell: bash -el {0}
         run: |
-          conda config --remove-key 'channels'
-          conda config --add 'channels' 'conda-forge'
-          conda config --set 'solver' 'libmamba'
-
+          printf '{"channels": ["conda-forge"], "solver": "libmamba"}' | conda config --stdin
           conda info
+          conda config --show
           conda list
 
       - name: Test
