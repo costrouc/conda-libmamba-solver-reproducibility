@@ -10,7 +10,9 @@ on:
         type: choice
         options:
         - '23.1.0'
+        - '22.11.1'
         - '22.11.0'
+        - '22.9.0'
       conda-libmamba-version:
         description: 'conda-libmamba-solver Version'
         required: true
@@ -19,6 +21,7 @@ on:
         options:
         - '23.1.0'
         - '22.12.0'
+        - '22.11.0'
       verbosity:
         description: 'Verbosity'
         required: true
@@ -29,6 +32,10 @@ on:
         - '-v'
         - '-vv'
         - '-vvv'
+      packages:
+        description: 'Packages'
+        required: true
+        default: "numpy"
 
 jobs:
   test:
@@ -58,7 +65,7 @@ jobs:
           conda config --show
           conda list
 
-      - name: Test
+      - name: Create environment
         shell: bash -el {0}
         run: |
-          conda create -n test numpy ${{ inputs.verbosity }}
+          conda create -n test ${{ inputs.packages }} ${{ inputs.verbosity }}
