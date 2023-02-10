@@ -48,7 +48,7 @@ jobs:
         shell: bash -el {0}
         run: |
           conda config --remove-key 'channels'
-          conda config --append 'channels' 'conda-forge'
+          conda config --add 'channels' 'conda-forge'
           conda config --set 'solver' 'libmamba'
 
           conda info
