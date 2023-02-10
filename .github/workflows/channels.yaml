@@ -27,6 +27,7 @@ on:
         type: choice
         options:
         - '23.1.0'
+        - '22.12.0'
 
 jobs:
   test:
@@ -39,10 +40,11 @@ jobs:
         with:
           auto-activate-base: true
           activate-environment: ""
+          miniconda-version: ${{ inputs.conda-version }}
 
       - name: Installation
         shell: bash -el {0}
-        run: conda install -c conda-forge conda==${{ inputs.conda-version }} conda-libmamba-solver==${{ inputs.conda-libmamba-version }}
+        run: conda install -c conda-forge conda-libmamba-solver==${{ inputs.conda-libmamba-version }}
 
       - name: Conda Info
         shell: bash -el {0}
@@ -55,4 +57,4 @@ jobs:
       - name: Test
         shell: bash -el {0}
         run: |
-          conda create -n test numpy --dry-run
+          conda create -n test numpy
