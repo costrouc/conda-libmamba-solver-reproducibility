@@ -63,7 +63,8 @@ jobs:
         with:
           auto-activate-base: true
           activate-environment: ""
-          channels: conda-forge
+          channels: conda-forge,defaults
+          channel-priority: true
           mamba-version: ${{ inputs.mamba-version }}
           use-mamba: true
 
@@ -83,7 +84,7 @@ jobs:
       - name: List environment details
         shell: bash -el {0}
         run: |
-          mamba list -n test
+          mamba env export -n test
 
   conda:
     name: conda=${{ inputs.conda-version }} os=${{ matrix.os }}
@@ -117,7 +118,7 @@ jobs:
       - name: List environment details
         shell: bash -el {0}
         run: |
-          conda list -n test
+          conda env export -n test
 
   conda-libmamba-solver:
     name: conda-libmamba-solver=${{ inputs.conda-libmamba-version }} os=${{ matrix.os }}
@@ -155,4 +156,4 @@ jobs:
       - name: List environment details
         shell: bash -el {0}
         run: |
-          conda list -n test
+          conda env export -n test
