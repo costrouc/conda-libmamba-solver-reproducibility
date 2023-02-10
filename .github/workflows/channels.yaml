@@ -40,7 +40,7 @@ jobs:
         with:
           auto-activate-base: true
           activate-environment: ""
-          miniconda-version: ${{ inputs.conda-version }}
+          conda-version: ${{ inputs.conda-version }}
 
       - name: Installation
         shell: bash -el {0}
