@@ -28,6 +28,16 @@ on:
         options:
         - '23.1.0'
         - '22.12.0'
+      verbosity:
+        description: 'Verbosity'
+        required: true
+        default: '-vv'
+        type: choice
+        options:
+        - ''
+        - '-v'
+        - '-vv'
+        - '-vvv'
 
 jobs:
   test:
@@ -57,4 +67,4 @@ jobs:
       - name: Test
         shell: bash -el {0}
         run: |
-          conda create -n test numpy
+          conda create -n test numpy ${{ inputs.verbosity }}
