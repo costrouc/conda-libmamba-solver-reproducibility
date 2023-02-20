@@ -68,7 +68,6 @@ jobs:
           conda list
 
       - name: Setup tmate session
-        shell: bash -el {0}
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 15
         with:
