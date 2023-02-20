@@ -59,7 +59,7 @@ jobs:
              --file $PWD/dev/requirements.txt \
              --file $PWD/tests/requirements.txt
           python -m pip install -e . --no-deps
-        if: ${{ !startsWith(inputs.conda-libmamba-version, '2') && inputs.os == 'ubuntu-latest' }}
+        if: ${{ !startsWith(inputs.conda-libmamba-version, '2') }}
 
       - name: Conda Info
         shell: bash -el {0}
