@@ -54,6 +54,7 @@ jobs:
           git clone https://github.com/conda/conda-libmamba-solver
           cd conda-libmamba-solver
           git checkout ${{ inputs.conda-libmamba-version }}
+          which conda
           /usr/share/miniconda/bin/conda install -y -p /usr/share/miniconda/ \
              --file $PWD/dev/requirements.txt \
              --file $PWD/tests/requirements.txt
