@@ -55,7 +55,7 @@ jobs:
           cd conda-libmamba-solver
           git checkout ${{ inputs.conda-libmamba-version }}
           which conda
-          $(dirname $(which conda))/../bin/conda install -y -p $(dirname $(which conda))/../ \
+          conda install -y -n base \
              --file $PWD/dev/requirements.txt \
              --file $PWD/tests/requirements.txt
           python -m pip install -e . --no-deps
