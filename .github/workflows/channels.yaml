@@ -68,7 +68,7 @@ jobs:
         shell: bash -el {0}
         run: |
           git clone https://github.com/conda/conda-libmamba-solver
-          /opt/conda/condabin/conda install -y -p /opt/conda \
+          conda install -y -p /opt/conda \
              --file conda-libmamba-solver-src/dev/requirements.txt \
              --file /opt/conda-libmamba-solver-src/tests/requirements.txt
           cd conda-libmamba-solver-src
