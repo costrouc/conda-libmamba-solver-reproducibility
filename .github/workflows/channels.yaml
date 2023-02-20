@@ -12,7 +12,7 @@ on:
         - 'main'
         - '23.1.0'
       conda-libmamba-version:
-        description: 'conda-libmamba-solver Version'
+        description: 'conda-libmamba-solver version/branch'
         required: true
         default: '23.1.0'
       channel:
@@ -43,12 +43,12 @@ jobs:
           activate-environment: ""
           conda-version: ${{ inputs.conda-version }}
 
-      - name: Installation from Conda
+      - name: conda-libmamba-solver from Conda
         shell: bash -el {0}
         run: conda install -c conda-forge conda-libmamba-solver==${{ inputs.conda-libmamba-version }}
         if: ${{ startsWith(inputs.conda-libmamba-version, '2') }}
 
-      - name: Installation from Git Repository
+      - name: conda-libmamba-solver from Git Repository
         shell: bash -el {0}
         run: |
           git clone https://github.com/conda/conda-libmamba-solver
