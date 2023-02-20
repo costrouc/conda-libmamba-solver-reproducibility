@@ -55,11 +55,11 @@ jobs:
           cd conda-libmamba-solver
           git checkout ${{ inputs.conda-libmamba-version }}
           which conda
-          /usr/share/miniconda/bin/conda install -y -p /usr/share/miniconda/ \
+          $(dirname $(which conda))/../bin/conda install -y -p $(dirname $(which conda))/../ \
              --file $PWD/dev/requirements.txt \
              --file $PWD/tests/requirements.txt
           python -m pip install -e . --no-deps
-        if: ${{ !startsWith(inputs.conda-libmamba-version, '2') }}
+        if: ${{ !startsWith(inputs.conda-libmamba-version, '2') && inputs.os == 'ubuntu-latest' }}
 
       - name: Conda Info
         shell: bash -el {0}
