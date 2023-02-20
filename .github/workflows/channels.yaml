@@ -62,14 +62,14 @@ jobs:
       - name: Installation
         shell: bash -el {0}
         run: conda install -c conda-forge conda-libmamba-solver==${{ inputs.conda-libmamba-version }}
-        if: ${{ inputs.conda-libmamba-solver != "main" }}
+        if: ${{ inputs.conda-libmamba-solver != 'main' }}
 
       - name: Installation
         shell: bash -el {0}
         run: |
           git clone https://github.com/conda/conda-libmamba-solver
           source conda-libmamba-solver/dev/bashrc_linux.sh
-        if: ${{ inputs.conda-libmamba-solver == "main" }}
+        if: ${{ inputs.conda-libmamba-solver == 'main' }}
 
       - name: Conda Info
         shell: bash -el {0}
