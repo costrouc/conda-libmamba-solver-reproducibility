@@ -70,9 +70,9 @@ jobs:
           git clone https://github.com/conda/conda-libmamba-solver
           which conda
           /usr/share/miniconda/bin/conda install -y -p /usr/share/miniconda/ \
-             --file conda-libmamba-solver-src/dev/requirements.txt \
-             --file /opt/conda-libmamba-solver-src/tests/requirements.txt
-          cd conda-libmamba-solver-src
+             --file $PWD/conda-libmamba-solver/dev/requirements.txt \
+             --file $PWD/conda-libmamba-solver/tests/requirements.txt
+          cd conda-libmamba-solver
           python -m pip install -e . --no-deps
         if: ${{ inputs.conda-libmamba-version == 'main' }}
 
