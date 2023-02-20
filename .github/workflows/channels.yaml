@@ -35,6 +35,7 @@ on:
         description: 'Operating System'
         required: true
         default: 'ubuntu-latest'
+        type: choice
         options:
           - macos-latest
           - ubuntu-latest
